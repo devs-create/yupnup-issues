@@ -2,11 +2,11 @@ import { createServerClient } from '@/lib/supabase';
 import StatsCards from '@/components/dashboard/StatsCards';
 import ChartsSection from '@/components/dashboard/ChartsSection';
 import RecentTickets from '@/components/dashboard/RecentTickets';
+import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import { DashboardStats } from '@/types';
 
 export default async function DashboardPage() {
   const supabase = await createServerClient();
-
   const { data: tickets } = await supabase
     .from('tickets')
     .select('id, status, priority, platform, created_at, updated_at')
@@ -32,8 +32,7 @@ export default async function DashboardPage() {
   const closedTickets = tickets?.filter(t => t.status === 'closed') || [];
   if (closedTickets.length > 0) {
     const totalHours = closedTickets.reduce((sum, t) => {
-      const diff = new Date(t.updated_at).getTime() - new Date(t.created_at).getTime();
-      return sum + diff / (1000 * 60 * 60);
+      return sum + (new Date(t.updated_at).getTime() - new Date(t.created_at).getTime()) / 3600000;
     }, 0);
     stats.avg_resolution_hours = Math.round(totalHours / closedTickets.length);
   }
@@ -47,10 +46,9 @@ export default async function DashboardPage() {
   const trendData = Array.from({ length: 7 }, (_, i) => {
     const date = new Date(now.getTime() - (6 - i) * 24 * 60 * 60 * 1000);
     const dateStr = date.toISOString().split('T')[0];
-    const count = tickets?.filter(t => t.created_at.startsWith(dateStr)).length || 0;
     return {
       date: date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
-      count,
+      count: tickets?.filter(t => t.created_at.startsWith(dateStr)).length || 0,
     };
   });
 
@@ -79,18 +77,9 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-xl font-bold text-white">Dashboard</h1>
-        <p className="text-slate-400 text-sm mt-0.5">Overview of all issues and activity</p>
-      </div>
-
+      <DashboardHeader />
       <StatsCards stats={stats} />
-      <ChartsSection
-        statusData={statusData}
-        priorityData={priorityData}
-        platformData={platformData}
-        trendData={trendData}
-      />
+      <ChartsSection statusData={statusData} priorityData={priorityData} platformData={platformData} trendData={trendData} />
       <RecentTickets tickets={recentTickets || []} />
     </div>
   );
