@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  :root {
+    --color-bg: #0f1117;
+    --color-surface: #1a1d27;
+    --color-surface-2: #1e2130;
+    --color-surface-3: #252836;
+    --color-border: #2d3142;
+    --color-brand: #0ea5e9;
+    --color-text: #e2e8f0;
+    --color-muted: #64748b;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #2d3142;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #363a4f;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-[#1a1d27] border border-[#2d3142] rounded-xl;
+  }
+
+  .input {
+    @apply w-full bg-[#252836] border border-[#2d3142] rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500
+      focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition-colors;
+  }
+
+  .textarea {
+    @apply input resize-none;
+  }
+
+  .select {
+    @apply input appearance-none cursor-pointer;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 bg-sky-500 hover:bg-sky-400 text-white font-semibold text-sm px-4 py-2 rounded-lg
+      transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 bg-[#252836] hover:bg-[#2d3142] text-slate-300 font-medium text-sm px-4 py-2 rounded-lg
+      border border-[#2d3142] transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 font-medium text-sm px-4 py-2 rounded-lg
+      border border-red-500/20 transition-all duration-150;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium border;
+  }
+
+  .label {
+    @apply block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wide;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-indigo-400;
+  }
+
+  .glow {
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.15);
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
